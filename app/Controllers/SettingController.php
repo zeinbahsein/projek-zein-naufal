@@ -1,27 +1,34 @@
 <?php
 
+// Mendefinisikan namespace untuk controller ini
 namespace App\Controllers;
 
+// Mengimpor model yang diperlukan
 use App\Models\Configs;
 use App\Models\Mitra;
 use App\Models\User;
 use App\Models\UserModel;
 use CodeIgniter\Controller;
 
+// Mendefinisikan kelas SettingController yang merupakan turunan dari Controller
 class SettingController extends Controller
 {
+    // Fungsi untuk memperbarui pengaturan
     public function update($id)
     {
+        // Memeriksa apakah pengguna sudah login
         if (!session()->get('logged_in')) {
+            // Jika tidak, arahkan ke halaman login
             return redirect()->to('/login');
         }
 
+        // Memuat helper untuk form dan URL
         helper(['form', 'url']);
 
-        // Load UserModel
+        // Membuat instance model Configs
         $configModel = new Configs();
 
-        // Validate input
+        // Menyiapkan aturan validasi
         $rules = [
             'nama_aplikasi' => 'required',
             'nama_perusahaan' => 'required',
@@ -35,7 +42,9 @@ class SettingController extends Controller
             'facebook' => 'permit_empty',
         ];
 
+        // Memvalidasi data
         if ($this->validate($rules)) {
+            // Menyiapkan data yang akan diperbarui
             $data = [
                 'nama_aplikasi' => $this->request->getPost('nama_aplikasi'),
                 'nama_perusahaan' => $this->request->getPost('nama_perusahaan'),
@@ -49,20 +58,16 @@ class SettingController extends Controller
                 'facebook' => $this->request->getPost('facebook'),
             ];
 
-            
-
-            // Update user data
+            // Memperbarui data pengaturan
             $configModel->update($id, $data);
 
-            // Set success message and redirect
+            // Menetapkan pesan sukses dan mengarahkan kembali ke halaman pengaturan
             session()->setFlashdata('success', 'Settings updated successfully');
             return redirect()->to('/settings');
         } else {
-            // Set error message and redirect back to profile page
+            // Menetapkan pesan kesalahan dan mengarahkan kembali ke halaman pengaturan dengan data input sebelumnya
             session()->setFlashdata('errors', $this->validator->getErrors());
             return redirect()->back()->withInput();
         }
     }
-
-    
 }

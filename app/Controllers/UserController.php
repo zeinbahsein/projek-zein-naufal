@@ -1,7 +1,9 @@
 <?php
 
+// Mendefinisikan namespace untuk controller ini
 namespace App\Controllers;
 
+// Mengimpor model yang diperlukan
 use App\Models\Jadwal;
 use App\Models\Member;
 use App\Models\Mitra;
@@ -9,27 +11,36 @@ use App\Models\User;
 use App\Models\UserModel;
 use CodeIgniter\Controller;
 
+// Mendefinisikan kelas UserController yang merupakan turunan dari Controller
 class UserController extends Controller
 {
 
+    // Fungsi untuk membuat pengguna baru
     public function create()
     {
+        // Memeriksa apakah pengguna sudah login
         if (!session()->get('logged_in')) {
+            // Jika tidak, arahkan ke halaman login
             return redirect()->to('/login');
         }
 
+        // Mengambil data pengguna yang sedang masuk
         $data['userdata'] = session()->get();
+
+        // Memeriksa peran pengguna
         $role = $data['userdata']['role'];
         if($role != 'superadmin'){
+            // Jika bukan superadmin, arahkan ke dasbor
             return redirect()->to('/dashboard');
         }
 
+        // Memuat helper untuk form dan URL
         helper(['form', 'url']);
 
+        // Membuat instance model User
         $userModels = new User();
 
-
-        // Prepare data to store
+        // Menyiapkan data untuk disimpan
         $validation = $this->validate([
             'username' => 'required',
             'password' => 'required',
@@ -37,6 +48,7 @@ class UserController extends Controller
         ]);
 
         if (!$validation) {
+            // Jika validasi gagal, kembali ke halaman sebelumnya dengan data input
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -47,34 +59,42 @@ class UserController extends Controller
             'role' => $this->request->getPost('role'),
         ];
 
-        // Update the record
+        // Memperbarui rekaman
         if ($userModels->insert($data)) {
             session()->setFlashdata('success', 'User added successfully');
         } else {
             session()->setFlashdata('error', 'Failed to add User');
         }
 
+        // Redirect ke halaman /users
         return redirect()->to('/users');
     }
 
+    // Fungsi untuk memperbarui informasi pengguna
     public function update($id)
     {
+        // Memeriksa apakah pengguna sudah login
         if (!session()->get('logged_in')) {
+            // Jika tidak, arahkan ke halaman login
             return redirect()->to('/login');
         }
 
+        // Mengambil data pengguna yang sedang masuk
         $data['userdata'] = session()->get();
+        // Memeriksa peran pengguna
         $role = $data['userdata']['role'];
         if($role != 'superadmin'){
+            // Jika bukan superadmin, arahkan ke dasbor
             return redirect()->to('/dashboard');
         }
 
+        // Memuat helper untuk form dan URL
         helper(['form', 'url']);
 
-        // Load UserModel
+        // Memuat model User
         $userModel = new User();
 
-        // Validate input
+        // Validasi input
         $rules = [
             'username' => 'required|min_length[3]|max_length[20]',
             'password' => 'permit_empty|min_length[3]',
@@ -82,43 +102,51 @@ class UserController extends Controller
         ];
 
         if ($this->validate($rules)) {
+            // Menyiapkan data yang akan diperbarui
             $data = [
                 'username' => $this->request->getPost('username'),
                 'role' => $this->request->getPost('role'),
             ];
 
-            // Check if password is provided
+            // Memeriksa apakah password disediakan
             $password = $this->request->getPost('password');
             if (!empty($password)) {
                 $data['password'] = $password;
             }
 
-            // Update user data
+            // Memperbarui data pengguna
             $userModel->update($id, $data);
 
-            // Set success message and redirect
+            // Menetapkan pesan sukses dan mengalihkan
             session()->setFlashdata('success', 'Account updated successfully');
             return redirect()->to('/users');
         } else {
-            // Set error message and redirect back to profile page
+            // Menetapkan pesan kesalahan dan mengalihkan kembali ke halaman profil dengan data input sebelumnya
             session()->setFlashdata('errors', $this->validator->getErrors());
             return redirect()->back()->withInput();
         }
     }
 
+    // Fungsi untuk menghapus pengguna
     public function delete($id)
     {
 
+        // Memeriksa apakah pengguna sudah login
         if (!session()->get('logged_in')) {
+            // Jika tidak, arahkan ke halaman login
             return redirect()->to('/login');
         }
 
+        // Mengambil data pengguna yang sedang masuk
         $data['userdata'] = session()->get();
+        // Memeriksa peran pengguna
         $role = $data['userdata']['role'];
         if ($role != 'superadmin') {
+            // Jika bukan superadmin, arahkan ke dasbor
             return redirect()->to('/dashboard');
         }
 
+        // Memuat model User, Mitra, Jadwal, dan Member
         $userModel = new User();
         $mitraModel = new Mitra();
         $jadwalModel = new Jadwal();
@@ -142,7 +170,6 @@ class UserController extends Controller
             }
 
             // Hapus user & members
-            
             $userModel->delete($id);
 
             session()->setFlashdata('success', 'Account deleted successfully');
@@ -150,7 +177,7 @@ class UserController extends Controller
             session()->setFlashdata('error', 'Failed to delete Account');
         }
 
-
+        // Redirect ke halaman /users
         return redirect()->to('/users');
     }
 }
