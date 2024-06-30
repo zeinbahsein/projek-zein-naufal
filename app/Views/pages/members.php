@@ -345,6 +345,43 @@
                 // Mengatur nilai dari input tanggal berakhir dengan tanggal yang telah dihitung.
             }
         }
+        tanggalDaftarInput.addEventListener('change', calculateEndDate);
+    // Menambahkan event listener ke elemen input tanggal pendaftaran yang akan memanggil fungsi calculateEndDate ketika nilai berubah.
+
+    paketMembershipSelect.addEventListener('change', calculateEndDate);
+    // Menambahkan event listener ke elemen select paket membership yang akan memanggil fungsi calculateEndDate ketika opsi yang dipilih berubah.
+
+    function calculateEndDateTambah() {
+        // Fungsi untuk menghitung tanggal berakhirnya paket membership pada form tambah data berdasarkan tanggal pendaftaran dan durasi paket.
+
+        const startDateTambah = new Date(tanggalDaftarInputTambah.value);
+        // Mengubah nilai tanggal pendaftaran pada form tambah data menjadi objek Date.
+
+        const selectedOptionTambah = paketMembershipSelectTambah.options[paketMembershipSelectTambah.selectedIndex];
+        // Mendapatkan opsi yang dipilih dari elemen select paket membership pada form tambah data.
+
+        const jangkaWaktuTambah = parseInt(selectedOptionTambah.getAttribute('data-jangka-waktu-tambah'));
+        // Mengambil nilai atribut 'data-jangka-waktu-tambah' dari opsi yang dipilih dan mengubahnya menjadi integer.
+
+        if (!isNaN(jangkaWaktuTambah) && startDateTambah instanceof Date && !isNaN(startDateTambah)) {
+            // Memastikan bahwa jangka waktu adalah angka dan startDateTambah adalah objek Date yang valid.
+
+            startDateTambah.setMonth(startDateTambah.getMonth() + jangkaWaktuTambah);
+            // Menambahkan jangka waktu ke bulan dari tanggal pendaftaran.
+
+            const endDateTambah = startDateTambah.toISOString().split('T')[0];
+            // Mengubah tanggal berakhir menjadi format ISO string dan hanya mengambil bagian tanggalnya (YYYY-MM-DD).
+
+            paketBerakhirInputTambah.value = endDateTambah;
+            // Mengatur nilai dari input tanggal berakhir pada form tambah data dengan tanggal yang telah dihitung.
+        }
+    }
+
+    tanggalDaftarInputTambah.addEventListener('change', calculateEndDateTambah);
+    // Menambahkan event listener ke elemen input tanggal pendaftaran pada form tambah data yang akan memanggil fungsi calculateEndDateTambah ketika nilai berubah.
+
+    paketMembershipSelectTambah.addEventListener('change', calculateEndDateTambah);
+    // Menambahkan event listener ke elemen select paket membership pada form tambah data yang akan memanggil fungsi calculateEndDateTambah ketika opsi yang dipilih berubah.
     });
 
 <script/>
