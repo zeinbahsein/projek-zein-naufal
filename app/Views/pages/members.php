@@ -297,7 +297,57 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Baris ini menambahkan event listener yang akan dijalankan ketika seluruh konten DOM telah dimuat.
 
+        const tanggalDaftarInput = document.getElementById('tanggal_daftar<?= $member['id'] ?>');
+        // Mendapatkan elemen input untuk tanggal pendaftaran berdasarkan id yang unik untuk setiap member.
+
+        const paketBerakhirInput = document.getElementById('paket_berakhir<?= $member['id'] ?>');
+        // Mendapatkan elemen input untuk tanggal berakhirnya paket membership berdasarkan id yang unik untuk setiap member.
+
+        const paketMembershipSelect = document.getElementById('id_paket_membership<?= $member['id'] ?>');
+        // Mendapatkan elemen select untuk paket membership berdasarkan id yang unik untuk setiap member.
+
+        // form tambah data
+        const tanggalDaftarInputTambah = document.getElementById('tanggal_daftar');
+        // Mendapatkan elemen input untuk tanggal pendaftaran pada form tambah data.
+
+        const paketBerakhirInputTambah = document.getElementById('paket_berakhir');
+        // Mendapatkan elemen input untuk tanggal berakhirnya paket membership pada form tambah data.
+
+        const paketMembershipSelectTambah = document.getElementById('id_paket_membership');
+        // Mendapatkan elemen select untuk paket membership pada form tambah data.
+
+        function calculateEndDate() {
+            // Fungsi untuk menghitung tanggal berakhirnya paket membership berdasarkan tanggal pendaftaran dan durasi paket.
+
+            const startDate = new Date(tanggalDaftarInput.value);
+            // Mengubah nilai tanggal pendaftaran menjadi objek Date.
+
+            const selectedOption = paketMembershipSelect.options[paketMembershipSelect.selectedIndex];
+            // Mendapatkan opsi yang dipilih dari elemen select paket membership.
+
+            const jangkaWaktu = parseInt(selectedOption.getAttribute('data-jangka-waktu'));
+            // Mengambil nilai atribut 'data-jangka-waktu' dari opsi yang dipilih dan mengubahnya menjadi integer.
+
+            if (!isNaN(jangkaWaktu) && startDate instanceof Date && !isNaN(startDate)) {
+                // Memastikan bahwa jangka waktu adalah angka dan startDate adalah objek Date yang valid.
+
+                startDate.setMonth(startDate.getMonth() + jangkaWaktu);
+                // Menambahkan jangka waktu ke bulan dari tanggal pendaftaran.
+
+                const endDate = startDate.toISOString().split('T')[0];
+                // Mengubah tanggal berakhir menjadi format ISO string dan hanya mengambil bagian tanggalnya (YYYY-MM-DD).
+
+                paketBerakhirInput.value = endDate;
+                // Mengatur nilai dari input tanggal berakhir dengan tanggal yang telah dihitung.
+            }
+        }
+    });
+
+<script/>
 
 
 <?= $this->include('layouts/footer') ?>
