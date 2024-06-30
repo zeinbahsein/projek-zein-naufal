@@ -102,7 +102,7 @@
                                             <button type="button" data-modal-target="edit<?= $member['id'] ?>" data-modal-toggle="edit<?= $member['id'] ?>" class="text-blue-700 hover:text-pink-500"><?= $member['nama'] ?> <i class="fa fa-pencil"></i></button>
                                         </th>
                                         <td class="px-6 py-4">
-                                            <?= $member['jangka_waktu'] ?>
+                                            <?= $member['jangka_waktu'] ?> Bulan
                                         </td>
                                         <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">
                                             <?= $member['telepon'] ?>
@@ -142,20 +142,20 @@
                                                 <form action="/members/update/<?= $member['id'] ?>" method="post">
                                                     <div class="p-4 md:p-5">
 
-                                                    <?php if($userdata['role'] == 'superadmin'): ?>
-                                                        <div class="mb-5">
-                                                            <label for="id_mitra<?= $member['id'] ?>" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Mitra</label>
-                                                            <select id="id_mitra<?= $member['id'] ?>" name="id_mitra" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                                <?php foreach ($users as $user) : ?>
-                                                                    <option value="<?= $user['id'] ?>" <?= ($member['id_mitra'] == $user['id']) ? 'selected' : '' ?>><?= $user['id'] ?> - <?= $user['username'] ?></option>
-                                                                <?php endforeach; ?>
-                                                            </select>
-                                                        </div>
-                                                        <?php else: ?>
+                                                        <?php if ($userdata['role'] == 'superadmin') : ?>
+                                                            <div class="mb-5">
+                                                                <label for="id_mitra<?= $member['id'] ?>" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Mitra</label>
+                                                                <select id="id_mitra<?= $member['id'] ?>" name="id_mitra" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                                    <?php foreach ($users as $user) : ?>
+                                                                        <option value="<?= $user['id'] ?>" <?= ($member['id_mitra'] == $user['id']) ? 'selected' : '' ?>><?= $user['id'] ?> - <?= $user['username'] ?></option>
+                                                                    <?php endforeach; ?>
+                                                                </select>
+                                                            </div>
+                                                        <?php else : ?>
                                                             <input type="hidden" name="id_mitra" value="<?= $userdata['id'] ?>">
                                                         <?php endif; ?>
 
-                                                        
+
 
                                                         <div class="mb-5">
                                                             <label for="nama<?= $member['id'] ?>" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Lengkap</label>
@@ -163,9 +163,9 @@
                                                         </div>
                                                         <div class="mb-5">
                                                             <label for="id_paket_membership<?= $member['id'] ?>" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Paket Membership</label>
-                                                            <select <?= ($userdata['role'] != 'superadmin') ? 'disabled' : '' ?> id="id_paket_membership<?= $member['id'] ?>" name="id_paket_membership" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                            <select id="id_paket_membership<?= $member['id'] ?>" name="id_paket_membership" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                                 <?php foreach ($pakets as $paket) : ?>
-                                                                    <option value="<?= $paket['id'] ?>" <?= ($member['id_paket_membership'] == $paket['id']) ? 'selected' : '' ?>><?= $paket['jangka_waktu'] ?> - Rp.<?= $paket['biaya_bulanan'] ?>/bln</option>
+                                                                    <option value="<?= $paket['id'] ?>" data-jangka-waktu="<?= $paket['jangka_waktu'] ?>" <?= ($member['id_paket_membership'] == $paket['id']) ? 'selected' : '' ?>><?= $paket['jangka_waktu'] ?> Bulan - Rp.<?= $paket['biaya_bulanan'] ?>/bln</option>
                                                                 <?php endforeach; ?>
                                                             </select>
                                                         </div>
@@ -193,6 +193,7 @@
                                                             <label for="paket_berakhir<?= $member['id'] ?>" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Berakhir Pada</label>
                                                             <input type="date" name="paket_berakhir" id="paket_berakhir<?= $member['id'] ?>" value="<?= $member['paket_berakhir'] ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
                                                         </div>
+
 
 
 
@@ -258,7 +259,7 @@
                         <label for="id_paket_membership" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Paket Membership</label>
                         <select id="id_paket_membership" name="id_paket_membership" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <?php foreach ($pakets as $paket) : ?>
-                                <option value="<?= $paket['id'] ?>"><?= $paket['jangka_waktu'] ?> - Rp.<?= $paket['biaya_bulanan'] ?>/bln</option>
+                                <option value="<?= $paket['id'] ?>" data-jangka-waktu-tambah="<?= $paket['jangka_waktu'] ?>"><?= $paket['jangka_waktu'] ?> Bulan - Rp.<?= $paket['biaya_bulanan'] ?>/bln</option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -269,7 +270,6 @@
                             <option value="wanita">Perempuan</option>
                         </select>
                     </div>
-
                     <div>
                         <label for="telepon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Telepon</label>
                         <input type="text" name="telepon" id="telepon" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
@@ -287,104 +287,57 @@
                         <input type="date" name="paket_berakhir" id="paket_berakhir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
                     </div>
 
-
-
                     <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>
-
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Baris ini menambahkan event listener yang akan dijalankan ketika seluruh konten DOM telah dimuat.
-
         const tanggalDaftarInput = document.getElementById('tanggal_daftar<?= $member['id'] ?>');
-        // Mendapatkan elemen input untuk tanggal pendaftaran berdasarkan id yang unik untuk setiap member.
-
         const paketBerakhirInput = document.getElementById('paket_berakhir<?= $member['id'] ?>');
-        // Mendapatkan elemen input untuk tanggal berakhirnya paket membership berdasarkan id yang unik untuk setiap member.
-
         const paketMembershipSelect = document.getElementById('id_paket_membership<?= $member['id'] ?>');
-        // Mendapatkan elemen select untuk paket membership berdasarkan id yang unik untuk setiap member.
 
         // form tambah data
         const tanggalDaftarInputTambah = document.getElementById('tanggal_daftar');
-        // Mendapatkan elemen input untuk tanggal pendaftaran pada form tambah data.
-
         const paketBerakhirInputTambah = document.getElementById('paket_berakhir');
-        // Mendapatkan elemen input untuk tanggal berakhirnya paket membership pada form tambah data.
-
         const paketMembershipSelectTambah = document.getElementById('id_paket_membership');
-        // Mendapatkan elemen select untuk paket membership pada form tambah data.
 
         function calculateEndDate() {
-            // Fungsi untuk menghitung tanggal berakhirnya paket membership berdasarkan tanggal pendaftaran dan durasi paket.
-
             const startDate = new Date(tanggalDaftarInput.value);
-            // Mengubah nilai tanggal pendaftaran menjadi objek Date.
-
             const selectedOption = paketMembershipSelect.options[paketMembershipSelect.selectedIndex];
-            // Mendapatkan opsi yang dipilih dari elemen select paket membership.
-
             const jangkaWaktu = parseInt(selectedOption.getAttribute('data-jangka-waktu'));
-            // Mengambil nilai atribut 'data-jangka-waktu' dari opsi yang dipilih dan mengubahnya menjadi integer.
 
             if (!isNaN(jangkaWaktu) && startDate instanceof Date && !isNaN(startDate)) {
-                // Memastikan bahwa jangka waktu adalah angka dan startDate adalah objek Date yang valid.
-
                 startDate.setMonth(startDate.getMonth() + jangkaWaktu);
-                // Menambahkan jangka waktu ke bulan dari tanggal pendaftaran.
-
                 const endDate = startDate.toISOString().split('T')[0];
-                // Mengubah tanggal berakhir menjadi format ISO string dan hanya mengambil bagian tanggalnya (YYYY-MM-DD).
-
                 paketBerakhirInput.value = endDate;
-                // Mengatur nilai dari input tanggal berakhir dengan tanggal yang telah dihitung.
             }
         }
+
         tanggalDaftarInput.addEventListener('change', calculateEndDate);
-    // Menambahkan event listener ke elemen input tanggal pendaftaran yang akan memanggil fungsi calculateEndDate ketika nilai berubah.
+        paketMembershipSelect.addEventListener('change', calculateEndDate);
 
-    paketMembershipSelect.addEventListener('change', calculateEndDate);
-    // Menambahkan event listener ke elemen select paket membership yang akan memanggil fungsi calculateEndDate ketika opsi yang dipilih berubah.
+        function calculateEndDateTambah() {
+            const startDateTambah = new Date(tanggalDaftarInputTambah.value);
+            const selectedOptionTambah = paketMembershipSelectTambah.options[paketMembershipSelectTambah.selectedIndex];
+            const jangkaWaktuTambah = parseInt(selectedOptionTambah.getAttribute('data-jangka-waktu-tambah'));
 
-    function calculateEndDateTambah() {
-        // Fungsi untuk menghitung tanggal berakhirnya paket membership pada form tambah data berdasarkan tanggal pendaftaran dan durasi paket.
-
-        const startDateTambah = new Date(tanggalDaftarInputTambah.value);
-        // Mengubah nilai tanggal pendaftaran pada form tambah data menjadi objek Date.
-
-        const selectedOptionTambah = paketMembershipSelectTambah.options[paketMembershipSelectTambah.selectedIndex];
-        // Mendapatkan opsi yang dipilih dari elemen select paket membership pada form tambah data.
-
-        const jangkaWaktuTambah = parseInt(selectedOptionTambah.getAttribute('data-jangka-waktu-tambah'));
-        // Mengambil nilai atribut 'data-jangka-waktu-tambah' dari opsi yang dipilih dan mengubahnya menjadi integer.
-
-        if (!isNaN(jangkaWaktuTambah) && startDateTambah instanceof Date && !isNaN(startDateTambah)) {
-            // Memastikan bahwa jangka waktu adalah angka dan startDateTambah adalah objek Date yang valid.
-
-            startDateTambah.setMonth(startDateTambah.getMonth() + jangkaWaktuTambah);
-            // Menambahkan jangka waktu ke bulan dari tanggal pendaftaran.
-
-            const endDateTambah = startDateTambah.toISOString().split('T')[0];
-            // Mengubah tanggal berakhir menjadi format ISO string dan hanya mengambil bagian tanggalnya (YYYY-MM-DD).
-
-            paketBerakhirInputTambah.value = endDateTambah;
-            // Mengatur nilai dari input tanggal berakhir pada form tambah data dengan tanggal yang telah dihitung.
+            if (!isNaN(jangkaWaktuTambah) && startDateTambah instanceof Date && !isNaN(startDateTambah)) {
+                startDateTambah.setMonth(startDateTambah.getMonth() + jangkaWaktuTambah);
+                const endDateTambah = startDateTambah.toISOString().split('T')[0];
+                paketBerakhirInputTambah.value = endDateTambah;
+            }
         }
-    }
 
-    tanggalDaftarInputTambah.addEventListener('change', calculateEndDateTambah);
-    // Menambahkan event listener ke elemen input tanggal pendaftaran pada form tambah data yang akan memanggil fungsi calculateEndDateTambah ketika nilai berubah.
-
-    paketMembershipSelectTambah.addEventListener('change', calculateEndDateTambah);
-    // Menambahkan event listener ke elemen select paket membership pada form tambah data yang akan memanggil fungsi calculateEndDateTambah ketika opsi yang dipilih berubah.
+        tanggalDaftarInputTambah.addEventListener('change', calculateEndDateTambah);
+        paketMembershipSelectTambah.addEventListener('change', calculateEndDateTambah);
     });
-
-<script/>
+</script>
 
 
 <?= $this->include('layouts/footer') ?>
